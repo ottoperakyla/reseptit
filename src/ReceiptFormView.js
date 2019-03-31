@@ -7,7 +7,7 @@ export default props => {
   const defaults = {
     ingredientUnit: "cl",
     ingredientAmount: 1,
-    ingredientPrice: 0
+    ingredientPrice: ""
   };
   const [formData, setFormData] = useState({
     title: "",

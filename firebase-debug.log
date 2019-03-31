@@ -1,0 +1,26 @@
+[debug] [2019-03-31T14:14:11.192Z] ----------------------------------------------------------------------
+[debug] [2019-03-31T14:14:11.194Z] Command:       /Users/otto/.nvm/versions/node/v11.6.0/bin/node /Users/otto/.nvm/versions/node/v11.6.0/bin/firebase functions:shell
+[debug] [2019-03-31T14:14:11.194Z] CLI Version:   6.5.0
+[debug] [2019-03-31T14:14:11.194Z] Platform:      darwin
+[debug] [2019-03-31T14:14:11.194Z] Node Version:  v11.6.0
+[debug] [2019-03-31T14:14:11.195Z] Time:          Sun Mar 31 2019 17:14:11 GMT+0300 (Eastern European Summer Time)
+[debug] [2019-03-31T14:14:11.195Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-03-31T14:14:11.209Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-03-31T14:14:11.209Z] > authorizing via signed-in user
+[debug] [2019-03-31T14:14:11.209Z] [iam] checking project reseptit-4564c for permissions ["firebase.projects.get"]
+[debug] [2019-03-31T14:14:11.211Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/reseptit-4564c:testIamPermissions  
+
+[debug] [2019-03-31T14:14:14.550Z] <<< HTTP RESPONSE 200
+[info] i  functions: Preparing to emulate functions.
+[debug] [2019-03-31T14:14:15.074Z] Fetching environment
+[debug] [2019-03-31T14:14:15.076Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/reseptit-4564c  
+ 
+[debug] [2019-03-31T14:14:16.224Z] <<< HTTP RESPONSE 200
+[debug] [2019-03-31T14:14:16.226Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/603908660388:getServerAppConfig  
+ 
+[debug] [2019-03-31T14:14:16.573Z] <<< HTTP RESPONSE 200
+[debug] [2019-03-31T14:14:16.573Z] Starting @google-cloud/functions-emulator
+[debug] [2019-03-31T14:14:18.134Z] Parsing function triggers
+[debug] [2019-03-31T14:14:18.386Z] Deploying functions locally
+[info] ✔  functions: addIngredient

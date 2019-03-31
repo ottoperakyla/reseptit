@@ -91,6 +91,16 @@ export default props => {
     R.assoc("created", new Date())
   );
 
+  const updateIngredients = ingredients => {
+    const batch = firestore.batch();
+    ingredients.forEach(ingredient => {
+      const id = `${ingredient.name}-${ingredient.amount}-${ingredient.unit}`;
+      const ingredientRef = firestore.doc(`ingredients/${id}`);
+      batch.set(ingredientRef, ingredient);
+    });
+    batch.commit();
+  };
+
   const submitForm = e => {
     e.preventDefault();
     if (formData.title.trim() === "") {
@@ -98,8 +108,10 @@ export default props => {
       return;
     }
     if (receiptRef) {
-      receiptRef.update(formData);
+      updateIngredients(formData.ingredients);
+      receiptRef.update(getReceiptData(formData));
     } else {
+      updateIngredients(formData.ingredients);
       firestore.collection("receipts").add(getReceiptData(formData));
     }
     props.history.push("/");
@@ -226,6 +238,8 @@ export default props => {
             <option>cl</option>
             <option>dl</option>
             <option>litra</option>
+            <option>tl</option>
+            <option>rl</option>
             <option>g</option>
             <option>kpl</option>
           </Input>

@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
+import * as R from "ramda";
 import { firestore } from "./firebase";
 import { Button, Form, FormGroup, Label, Input, Table } from "reactstrap";
 
 export default props => {
+  const defaults = {
+    ingredientUnit: "cl",
+    ingredientAmount: 1,
+    ingredientPrice: 0
+  };
   const [formData, setFormData] = useState({
     title: "",
     url: "",
@@ -10,8 +16,9 @@ export default props => {
     mainIngredient: "Liha",
     ingredients: [],
     ingredientName: "",
-    ingredientUnit: "cl",
-    ingredientAmount: 1
+    ingredientUnit: defaults.ingredientUnit,
+    ingredientAmount: defaults.ingredientAmount,
+    ingredientPrice: defaults.ingredientPrice
   });
   const { receiptId } = props.match.params;
   const receiptRef = receiptId && firestore.doc(`receipts/${receiptId}`);
@@ -22,7 +29,7 @@ export default props => {
         const snapshot = await receiptRef.get();
 
         if (snapshot.exists) {
-          setFormData({ ...snapshot.data() });
+          setFormData({ ...formData, ...snapshot.data() });
         }
       }
     }
@@ -52,13 +59,37 @@ export default props => {
     const {
       ingredientName: name,
       ingredientAmount: amount,
-      ingredientUnit: unit
+      ingredientUnit: unit,
+      ingredientPrice: price
     } = formData;
     setFormData({
       ...formData,
-      ingredients: formData.ingredients.concat({ name, amount, unit })
+      ingredientName: "",
+      ingredientAmount: defaults.ingredientAmount,
+      ingredientUnit: defaults.ingredientUnit,
+      ingredientPrice: defaults.ingredientPrice,
+      ingredients: formData.ingredients.concat({ name, amount, unit, price })
     });
   };
+
+  const deleteIngredient = idx => {
+    setFormData({
+      ...formData,
+      ingredients: formData.ingredients.filter((_, iIdx) => iIdx !== idx)
+    });
+  };
+
+  const getReceiptData = R.pipe(
+    R.pick([
+      "title",
+      "url",
+      "cookingTime",
+      "instructions",
+      "mainIngredient",
+      "ingredients"
+    ]),
+    R.assoc("created", new Date())
+  );
 
   const submitForm = e => {
     e.preventDefault();
@@ -69,9 +100,7 @@ export default props => {
     if (receiptRef) {
       receiptRef.update(formData);
     } else {
-      firestore
-        .collection("receipts")
-        .add({ ...formData, created: new Date() });
+      firestore.collection("receipts").add(getReceiptData(formData));
     }
     props.history.push("/");
   };
@@ -149,12 +178,13 @@ export default props => {
         </FormGroup>
       </Form>
       <h4>Raaka-aineet</h4>
-      <Table>
+      <Table responsive>
         <tbody>
           <tr>
             <th>Määrä</th>
             <th>Yksikkö</th>
             <th>Raaka-aine</th>
+            <th>Hinta</th>
             <th>Toiminnot</th>
           </tr>
           {formData.ingredients.map((ingredient, idx) => (
@@ -162,8 +192,11 @@ export default props => {
               <td>{ingredient.amount}</td>
               <td>{ingredient.unit}</td>
               <td>{ingredient.name}</td>
+              <td>{ingredient.price}</td>
               <td>
-                <Button color="danger">Poista</Button>
+                <Button onClick={() => deleteIngredient(idx)} color="danger">
+                  Poista
+                </Button>
               </td>
             </tr>
           ))}
@@ -206,6 +239,19 @@ export default props => {
             onChange={setInput}
             type="text"
             id="ingredientName"
+          />
+        </FormGroup>
+        <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+          <Label for="ingredientPrice" className="mr-sm-2">
+            Hinta (€)
+          </Label>
+          <Input
+            value={formData.ingredientPrice}
+            type="number"
+            onChange={setInput}
+            id="ingredientPrice"
+            step="any"
+            min="1"
           />
         </FormGroup>
         <Button onClick={addIngredient} className="mb-4 mt-2" color="primary">

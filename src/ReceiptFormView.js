@@ -79,11 +79,15 @@ export default props => {
   return (
     <>
       <Form>
-        <h4>Resepti</h4>
-        {receiptRef && (
-          <Button onClick={deleteReceipt} color="danger">
-            Poista
-          </Button>
+        {receiptRef ? (
+          <h4>
+            {formData.title}
+            <Button className="ml-2" onClick={deleteReceipt} color="danger">
+              Poista
+            </Button>
+          </h4>
+        ) : (
+          <h4>Lisää resepti</h4>
         )}
         <FormGroup>
           <Label for="title">Nimi</Label>
@@ -151,12 +155,16 @@ export default props => {
             <th>Määrä</th>
             <th>Yksikkö</th>
             <th>Raaka-aine</th>
+            <th>Toiminnot</th>
           </tr>
           {formData.ingredients.map((ingredient, idx) => (
             <tr key={idx}>
               <td>{ingredient.amount}</td>
               <td>{ingredient.unit}</td>
               <td>{ingredient.name}</td>
+              <td>
+                <Button color="danger">Poista</Button>
+              </td>
             </tr>
           ))}
         </tbody>

@@ -14,7 +14,7 @@ export default ({
   id,
   title,
   image,
-  ingredient,
+  mainIngredient,
   cookingTime,
   description,
   url
@@ -26,12 +26,16 @@ export default ({
         <CardTitle>
           {title} [<Link to={`receipt-form/${id}`}>muokkaa</Link>]
         </CardTitle>
-        <Badge color="primary">{ingredient}</Badge>
+        <Badge color="primary">{mainIngredient}</Badge>
         <Badge color="info">{cookingTime}</Badge>
         <CardText>{description}</CardText>
-        <a href={url}>
-          <Button color="primary">Katso resepti</Button>
-        </a>
+        {url ? (
+          <a href={url}>{url}</a>
+        ) : (
+          <Link to={`/receipts/${id}`}>
+            <Button color="primary">Katso resepti</Button>
+          </Link>
+        )}
       </CardBody>
     </Card>
   );

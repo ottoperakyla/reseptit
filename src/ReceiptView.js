@@ -8,6 +8,7 @@ export default () => {
   useEffect(() => {
     const unsubscribe = firestore
       .collection("receipts")
+      .orderBy("created", "desc")
       .onSnapshot(snapshot => {
         const receipts = snapshot.docs.map(doc => ({
           id: doc.id,

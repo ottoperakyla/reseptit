@@ -5,11 +5,13 @@ import { auth, signInWithGoogle } from "./firebase";
 import Header from "./Header";
 import ReceiptView from "./ReceiptView";
 import ReceiptFormView from "./ReceiptFormView";
+import SingleReceiptView from "./SingleReceiptView";
 
 class App extends Component {
   state = {
     user: undefined
   };
+  unsubscribeFromAuth = null;
 
   componentDidMount() {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
@@ -25,10 +27,14 @@ class App extends Component {
     return (
       <Router>
         <Header />
-        <Container fluid>
+        <Container>
           {this.state.user ? (
             <>
               <Route exact path="/" component={ReceiptView} />
+              <Route
+                path="/receipts/:receiptId"
+                component={SingleReceiptView}
+              />
               <Route
                 path="/receipt-form/:receiptId?"
                 component={ReceiptFormView}
